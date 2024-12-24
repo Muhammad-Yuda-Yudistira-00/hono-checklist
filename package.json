@@ -1,0 +1,23 @@
+{
+  "name": "hono-checklist",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "seed": "bun prisma/seeders/seed.ts",
+    "format": "prettier --write .",
+    "build": "bun build src/index.ts --outdir dist --sourcemap --minify",
+    "commit": "bun update && prettier --write . && bun build src/index.ts --outdir dist --sourcemap --minify && git add ."
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "hono": "^4.6.14",
+    "winston": "^3.17.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.4.2",
+    "prisma": "^6.0.1"
+  }
+}
+
+
