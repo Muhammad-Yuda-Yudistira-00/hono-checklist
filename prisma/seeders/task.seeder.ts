@@ -15,12 +15,12 @@ export async function seedTask() {
       status: 'done'
     },
     {
-      checklist_id: 5,
+      checklist_id: 2,
       title: 'Team standup meeting',
       status: 'done'
     },
     {
-      checklist_id: 5,
+      checklist_id: 2,
       title: 'Update Jira tickets',
       status: 'in_progress'
     },
