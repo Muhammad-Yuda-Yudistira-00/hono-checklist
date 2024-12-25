@@ -31,6 +31,11 @@ Response Body :
 
 Endpoint : GET /api/checklist/{code}/task
 
+Query Parameter :
+
+- page : number, default 1
+- per_page : number, default 10
+
 Response Body :
 
 ```json
@@ -69,14 +74,16 @@ Response Body :
 
 ## Update Task By Checklist Code
 
-Endpoint : PUT /api/checklist/{code}/task/{taskId}
+Endpoint : PATCH /api/checklist/{code}/task/{taskId}
 
 Request Body :
+
+- status : in_progress atau done
 
 ```json
 {
   "title": "string",
-  "status": "done" // in_progress | done
+  "status": "done"
 }
 ```
 

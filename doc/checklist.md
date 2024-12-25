@@ -25,6 +25,11 @@ Response Body :
 
 Endpoint : GET /api/checklist
 
+Query Parameter :
+
+- page : number, default 1
+- per_page : number, default 10
+
 Response Body :
 
 ```json
