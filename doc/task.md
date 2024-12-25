@@ -49,7 +49,13 @@ Response Body :
       "title": "string",
       "status": "string"
     }
-  ]
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "perPage": 10,
+    "totalPages": 1,
+    "totalItems": 1
+  }
 }
 ```
 

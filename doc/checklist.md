@@ -45,7 +45,13 @@ Response Body :
       "description": "string",
       "createdAt": "2023-09-15T08:47:55.000Z"
     }
-  ]
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "perPage": 10,
+    "totalPages": 1,
+    "totalItems": 1
+  }
 }
 ```
 
