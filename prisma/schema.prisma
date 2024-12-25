@@ -28,6 +28,7 @@ model Checklist {
   tasks       Task[]
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  deleted     Boolean  @default(false)
 
   @@map("checklist")
 }

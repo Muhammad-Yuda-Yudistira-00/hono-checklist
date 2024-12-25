@@ -1,3 +1,4 @@
+import { Checklist, Task } from '@prisma/client'
 import {
   CreateTaskRequest,
   GetTaskRequest,
@@ -10,10 +11,13 @@ import {
 } from '../model/task.model'
 import { prisma } from '../utils/prisma'
 import { TaskValidation } from '../validation/task.validation'
+import { HTTPException } from 'hono/http-exception'
 
 export class TaskService {
   static async create(request: CreateTaskRequest): Promise<TaskResponse> {
     request = TaskValidation.CREATE.parse(request)
+
+    await this.checklistMustExists(request.code)
 
     const task = await prisma.task.create({
       data: {
@@ -33,13 +37,7 @@ export class TaskService {
   static async list(request: ListTaskRequest): Promise<ListTaskResponse> {
     request = TaskValidation.LIST.parse(request)
 
-    const checklist = await prisma.checklist.findFirst({
-      where: { code: request.code }
-    })
-
-    if (!checklist) {
-      throw new Error('Checklist not found')
-    }
+    await this.checklistMustExists(request.code)
 
     const tasks = await prisma.task.findMany({
       take: request.per_page,
@@ -69,44 +67,19 @@ export class TaskService {
   static async get(request: GetTaskRequest): Promise<TaskResponse> {
     request = TaskValidation.GET.parse(request)
 
-    const checklist = await prisma.checklist.findFirst({
-      where: { code: request.code }
-    })
+    await this.checklistMustExists(request.code)
 
-    if (!checklist) {
-      throw new Error('Checklist not found')
-    }
-
-    const task = await prisma.task.findFirst({
-      where: { id: request.id }
-    })
-
-    if (!task) {
-      throw new Error('Task not found')
-    }
+    const task = await this.taskMustExists(request.code, request.id)
 
     return toTaskResponse(task)
   }
 
   static async update(request: UpdateTaskRequest): Promise<TaskResponse> {
     request = TaskValidation.UPDATE.parse(request)
-    // status must in_progress, done
 
-    const checklist = await prisma.checklist.findFirst({
-      where: { id: request.id }
-    })
+    await this.checklistMustExists(request.code)
 
-    if (!checklist) {
-      throw new Error('Checklist not found')
-    }
-
-    const task = await prisma.task.findFirst({
-      where: { id: request.id }
-    })
-
-    if (!task) {
-      throw new Error('Task not found')
-    }
+    const task = await this.taskMustExists(request.code, request.id)
 
     if (request.title) {
       task.title = request.title
@@ -114,7 +87,9 @@ export class TaskService {
 
     if (request.status) {
       if (request.status !== 'in_progress' && request.status !== 'done') {
-        throw new Error('Status must be in_progress or done')
+        throw new HTTPException(400, {
+          message: 'Invalid status'
+        })
       }
 
       task.status = request.status
@@ -134,26 +109,48 @@ export class TaskService {
   static async remove(request: RemoveTaskRequest): Promise<Boolean> {
     request = TaskValidation.REMOVE.parse(request)
 
-    const checklist = await prisma.checklist.findFirst({
-      where: { code: request.code }
-    })
+    await this.checklistMustExists(request.code)
 
-    if (!checklist) {
-      throw new Error('Checklist not found')
-    }
-
-    const task = await prisma.task.findFirst({
-      where: { id: request.id }
-    })
-
-    if (!task) {
-      throw new Error('Task not found')
-    }
+    await this.taskMustExists(request.code, request.id)
 
     await prisma.task.delete({
       where: { id: request.id }
     })
 
     return true
+  }
+
+  static async checklistMustExists(code: string): Promise<Checklist> {
+    const checklist = await prisma.checklist.findFirst({
+      where: { code, deleted: false }
+    })
+
+    if (!checklist) {
+      throw new HTTPException(404, {
+        message: 'Checklist not found'
+      })
+    }
+
+    return checklist
+  }
+
+  static async taskMustExists(code: string, id: number): Promise<Task> {
+    const task = await prisma.task.findFirst({
+      where: {
+        id,
+        checklist: {
+          code: code,
+          deleted: false
+        }
+      }
+    })
+
+    if (!task) {
+      throw new HTTPException(404, {
+        message: 'Task not found'
+      })
+    }
+
+    return task
   }
 }

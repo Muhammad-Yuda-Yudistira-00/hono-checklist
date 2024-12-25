@@ -8,7 +8,7 @@
     "commit": "bun update && prettier --write . && bun build src/index.ts --outdir dist --sourcemap --minify && git add ."
   },
   "dependencies": {
-    "@prisma/client": "^6.0.1",
+    "@prisma/client": "^6.1.0",
     "hono": "^4.6.14",
     "winston": "^3.17.0",
     "zod": "^3.24.1"
@@ -16,8 +16,6 @@
   "devDependencies": {
     "@types/bun": "latest",
     "prettier": "^3.4.2",
-    "prisma": "^6.0.1"
+    "prisma": "^6.1.0"
   }
 }
-
-
