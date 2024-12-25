@@ -94,8 +94,11 @@ export class ChecklistService {
 
     await this.checklistMustExists(id)
 
-    await prisma.checklist.delete({
-      where: { id }
+    await prisma.checklist.update({
+      where: { id },
+      data: {
+        deleted: true
+      }
     })
 
     return true
