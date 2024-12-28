@@ -37,13 +37,13 @@ const createServer = () => {
         message: err.message
       })
     } else if (err instanceof ZodError) {
-      logger.error(err.message)
+      logger.error(JSON.parse(err.message))
 
       c.status(400)
       return c.json({
         status: false,
         statusCode: 400,
-        message: err.message
+        message: JSON.parse(err.message)
       })
     } else {
       logger.error(err.message)
