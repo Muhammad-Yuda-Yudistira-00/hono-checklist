@@ -21,6 +21,7 @@ Response Body :
   "message": "Create task success",
   "data": {
     "id": "number",
+    "order": "number",
     "title": "string",
     "status": "string"
   }
@@ -46,6 +47,7 @@ Response Body :
   "data": [
     {
       "id": "number",
+      "order": "number",
       "title": "string",
       "status": "string"
     }
@@ -72,6 +74,7 @@ Response Body :
   "message": "Get task success",
   "data": {
     "id": "number",
+    "order": "number",
     "title": "string",
     "status": "string"
   }
@@ -88,6 +91,7 @@ Request Body :
 
 ```json
 {
+  "order": "number",
   "title": "string",
   "status": "done"
 }
@@ -102,6 +106,7 @@ Response Body :
   "message": "Update task success",
   "data": {
     "id": "number",
+    "order": "number",
     "title": "string",
     "status": "string"
   }

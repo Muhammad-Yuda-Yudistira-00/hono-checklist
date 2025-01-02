@@ -22,21 +22,21 @@ checklistController.get('/checklist', async (c) => {
   return response(c, 200, 'List checklist success', checklistResponse)
 })
 
-checklistController.get('/checklist/:id', async (c) => {
-  const id = Number(c.req.param('id'))
+checklistController.get('/checklist/:code', async (c) => {
+  const code = String(c.req.param('code'))
 
-  const checklistResponse = await ChecklistService.get(id)
+  const checklistResponse = await ChecklistService.get(code)
 
   return response(c, 200, 'Get checklist success', checklistResponse)
 })
 
-checklistController.patch('/checklist/:id', async (c) => {
-  const id = Number(c.req.param('id'))
+checklistController.patch('/checklist/:code', async (c) => {
+  const code = String(c.req.param('code'))
 
   const formData = await c.req.formData()
 
   const request: UpdateChecklistRequest = {
-    id: id,
+    code: code,
     title: formData.get('title')?.toString() || '',
     description: formData.get('description')?.toString() || ''
   }
@@ -46,10 +46,10 @@ checklistController.patch('/checklist/:id', async (c) => {
   return response(c, 200, 'Update checklist success', checklistResponse)
 })
 
-checklistController.delete('/checklist/:id', async (c) => {
-  const id = Number(c.req.param('id'))
+checklistController.delete('/checklist/:code', async (c) => {
+  const code = String(c.req.param('code'))
 
-  const checklistResponse = await ChecklistService.remove(id)
+  const checklistResponse = await ChecklistService.remove(code)
 
   return response(c, 200, 'Remove checklist success', checklistResponse)
 })

@@ -54,6 +54,7 @@ taskController.patch('/checklist/:code/task/:id', async (c) => {
   const request: UpdateTaskRequest = {
     code: String(c.req.param('code')),
     id: Number(c.req.param('id')),
+    order: Number(formData.get('order')) || null,
     title: formData.get('title')?.toString() || '',
     status: (formData.get('status')?.toString() as Status) || ''
   }

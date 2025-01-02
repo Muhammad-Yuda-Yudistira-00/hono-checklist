@@ -6,13 +6,13 @@ export class checklistValidation {
     per_page: z.number().min(1).max(100).positive()
   })
 
-  static readonly GET: ZodType = z.number().positive()
+  static readonly GET: ZodType = z.string()
 
   static readonly UPDATE: ZodType = z.object({
-    id: z.number().positive(),
+    code: z.string(),
     title: z.string().max(100),
     description: z.string().max(100)
   })
 
-  static readonly REMOVE: ZodType = z.number().positive()
+  static readonly REMOVE: ZodType = z.string()
 }

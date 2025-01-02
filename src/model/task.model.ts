@@ -19,6 +19,7 @@ export type GetTaskRequest = {
 export type UpdateTaskRequest = {
   code: string
   id: number
+  order: number | null
   title: string
   status: Status
 }
@@ -30,6 +31,7 @@ export type RemoveTaskRequest = {
 
 export type TaskResponse = {
   id: number
+  order: number
   title: string
   status: string
 }
@@ -47,6 +49,7 @@ export type ListTaskResponse = {
 export function toTaskResponse(task: Task): TaskResponse {
   return {
     id: task.id,
+    order: task.order,
     title: task.title,
     status: task.status
   }

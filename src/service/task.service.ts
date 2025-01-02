@@ -19,9 +19,18 @@ export class TaskService {
 
     await this.checklistMustExists(request.code)
 
+    // order
+
+    const order = await prisma.task.count({
+      where: {
+        checklist: { code: request.code }
+      }
+    })
+
     const task = await prisma.task.create({
       data: {
         title: request.title,
+        order: order + 1,
         status: 'in_progress',
         checklist: { connect: { code: request.code } }
       }
@@ -40,6 +49,7 @@ export class TaskService {
     await this.checklistMustExists(request.code)
 
     const tasks = await prisma.task.findMany({
+      orderBy: { order: 'asc' },
       take: request.per_page,
       skip: (request.page - 1) * request.per_page,
       where: {
@@ -81,6 +91,35 @@ export class TaskService {
 
     const task = await this.taskMustExists(request.code, request.id)
 
+    if (request.order) {
+      const oldTask = task
+
+      if (oldTask.order < request.order) {
+        await prisma.task.updateMany({
+          where: {
+            order: { gt: oldTask.order, lte: request.order }
+          },
+          data: {
+            order: { decrement: 1 }
+          }
+        })
+      } else if (oldTask.order > request.order) {
+        await prisma.task.updateMany({
+          where: {
+            order: { gte: request.order, lt: oldTask.order }
+          },
+          data: {
+            order: { increment: 1 }
+          }
+        })
+      }
+
+      await prisma.task.update({
+        where: { id: request.id },
+        data: { order: request.order }
+      })
+    }
+
     if (request.title) {
       task.title = request.title
     }
@@ -111,11 +150,27 @@ export class TaskService {
 
     await this.checklistMustExists(request.code)
 
-    await this.taskMustExists(request.code, request.id)
+    const task = await this.taskMustExists(request.code, request.id)
 
     await prisma.task.delete({
       where: { id: request.id }
     })
+
+    const tasks = await prisma.task.findMany({
+      orderBy: { order: 'asc' },
+      where: {
+        checklist: { code: request.code }
+      }
+    })
+
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].order > task.order) {
+        await prisma.task.update({
+          where: { id: tasks[i].id },
+          data: { order: tasks[i].order - 1 }
+        })
+      }
+    }
 
     return true
   }

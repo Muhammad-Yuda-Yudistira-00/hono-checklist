@@ -55,9 +55,9 @@ Response Body :
 }
 ```
 
-## Get Checklist By Id
+## Get Checklist By Code
 
-Endpoint : GET /api/checklist/{id}
+Endpoint : GET /api/checklist/{code}
 
 Response Body :
 
@@ -76,9 +76,9 @@ Response Body :
 }
 ```
 
-## Update Checklist By Id
+## Update Checklist By Code
 
-Endpoint : PATCH /api/checklist/{id}
+Endpoint : PATCH /api/checklist/{code}
 
 Request Body :
 
@@ -106,9 +106,9 @@ Response Body :
 }
 ```
 
-## Remove Checklist By Id
+## Remove Checklist By Code
 
-Endpoint : DELETE /api/checklist/{id}
+Endpoint : DELETE /api/checklist/{code}
 
 Response Body :
 

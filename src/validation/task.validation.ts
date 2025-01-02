@@ -20,6 +20,7 @@ export class TaskValidation {
   static readonly UPDATE: ZodType = z.object({
     code: z.string().min(1).max(8),
     id: z.number().positive(),
+    order: z.number().positive().nullable(),
     title: z.string().max(100),
     status: z.string().max(100)
   })

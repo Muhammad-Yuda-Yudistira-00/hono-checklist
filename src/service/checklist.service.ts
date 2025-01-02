@@ -57,10 +57,10 @@ export class ChecklistService {
     }
   }
 
-  static async get(id: number): Promise<ChecklistResponse> {
-    id = checklistValidation.GET.parse(id)
+  static async get(code: string): Promise<ChecklistResponse> {
+    code = checklistValidation.GET.parse(code)
 
-    const checklist = await this.checklistMustExists(id)
+    const checklist = await this.checklistMustExists(code)
 
     return toChecklistResponse(checklist)
   }
@@ -68,7 +68,7 @@ export class ChecklistService {
   static async update(request: UpdateChecklistRequest): Promise<ChecklistResponse> {
     request = checklistValidation.UPDATE.parse(request)
 
-    const checklist = await this.checklistMustExists(request.id)
+    const checklist = await this.checklistMustExists(request.code)
 
     if (request.title) {
       checklist.title = request.title
@@ -79,7 +79,7 @@ export class ChecklistService {
     }
 
     const updatedChecklist = await prisma.checklist.update({
-      where: { id: checklist.id, deleted: false },
+      where: { code: request.code, deleted: false },
       data: {
         title: checklist.title,
         description: checklist.description
@@ -89,13 +89,13 @@ export class ChecklistService {
     return toChecklistResponse(updatedChecklist)
   }
 
-  static async remove(id: number): Promise<Boolean> {
-    id = checklistValidation.REMOVE.parse(id)
+  static async remove(code: string): Promise<Boolean> {
+    code = checklistValidation.REMOVE.parse(code)
 
-    await this.checklistMustExists(id)
+    await this.checklistMustExists(code)
 
     await prisma.checklist.update({
-      where: { id },
+      where: { code },
       data: {
         deleted: true
       }
@@ -104,9 +104,9 @@ export class ChecklistService {
     return true
   }
 
-  static async checklistMustExists(id: number): Promise<Checklist> {
+  static async checklistMustExists(code: string): Promise<Checklist> {
     const checklist = await prisma.checklist.findFirst({
-      where: { id, deleted: false }
+      where: { code, deleted: false }
     })
 
     if (!checklist) {

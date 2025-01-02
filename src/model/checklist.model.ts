@@ -6,7 +6,7 @@ export type ListChecklistRequest = {
 }
 
 export type UpdateChecklistRequest = {
-  id: number
+  code: string
   title: string | null
   description: string | null
 }

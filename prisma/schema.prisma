@@ -36,6 +36,7 @@ model Checklist {
 model Task {
   id           Int       @id @default(autoincrement())
   checklist_id Int
+  order        Int
   title        String
   status       Status    @default(in_progress)
   created_at   DateTime  @default(now())
