@@ -6,14 +6,14 @@ import {
   UpdateChecklistRequest
 } from '../model/checklist.model'
 import { prisma } from '../utils/prisma'
-import { randomBytes } from 'crypto'
+import { nanoid } from 'nanoid'
 import { checklistValidation } from '../validation/checklist.validation'
 import { Checklist } from '@prisma/client'
 import { HTTPException } from 'hono/http-exception'
 
 export class ChecklistService {
   static async create(): Promise<ChecklistResponse> {
-    const code = randomBytes(4).toString('hex')
+    const code = nanoid(8)
 
     const checklist = await prisma.checklist.create({
       data: {

@@ -4,12 +4,13 @@
     "dev": "bun run --hot src/index.ts",
     "seed": "bun prisma/seeders/seed.ts",
     "format": "prettier --write .",
-    "build": "bun build src/index.ts --outdir dist --sourcemap --minify",
+    "build": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/myApp",
     "commit": "bun update && prettier --write . && bun build src/index.ts --outdir dist --sourcemap --minify && git add ."
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
     "hono": "^4.6.15",
+    "nanoid": "^5.0.9",
     "winston": "^3.17.0",
     "zod": "^3.24.1"
   },
