@@ -5,12 +5,6 @@ import { ListChecklistRequest, UpdateChecklistRequest } from '../model/checklist
 
 export const checklistController = new Hono()
 
-checklistController.get('/checklist/expire', async (c) => {
-  const checklistResponse = await ChecklistService.updateExpiredAt()
-
-  return response(c, 200, 'Update checklist expired_at success', checklistResponse)
-})
-
 checklistController.post('/checklist', async (c) => {
   const checklistResponse = await ChecklistService.create()
 

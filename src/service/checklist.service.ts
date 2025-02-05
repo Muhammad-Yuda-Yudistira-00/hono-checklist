@@ -124,17 +124,4 @@ export class ChecklistService {
 
     return checklist
   }
-
-  // update all checklist expired_at to created_at + 30 days
-  static async updateExpiredAt() {
-    await prisma.checklist.updateMany({
-      where: { deleted: false, expired_at: { gte: new Date() } },
-      data: {
-        created_at: new Date(),
-        expired_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-      }
-    })
-
-    return true
-  }
 }
