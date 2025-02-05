@@ -18,7 +18,8 @@ export class ChecklistService {
     const checklist = await prisma.checklist.create({
       data: {
         code,
-        title: 'Untitled'
+        title: 'Untitled',
+        expired_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
       }
     })
 
@@ -33,16 +34,22 @@ export class ChecklistService {
     request = checklistValidation.LIST.parse(request)
 
     const checklists = await prisma.checklist.findMany({
-      where: {
-        deleted: false
-      },
       take: request.per_page,
-      skip: (request.page - 1) * request.per_page
+      skip: (request.page - 1) * request.per_page,
+      where: {
+        deleted: false,
+        expired_at: {
+          gte: new Date()
+        }
+      }
     })
 
     const total = await prisma.checklist.count({
       where: {
-        deleted: false
+        deleted: false,
+        expired_at: {
+          gte: new Date()
+        }
       }
     })
 
@@ -106,7 +113,7 @@ export class ChecklistService {
 
   static async checklistMustExists(code: string): Promise<Checklist> {
     const checklist = await prisma.checklist.findFirst({
-      where: { code, deleted: false }
+      where: { code, deleted: false, expired_at: { gte: new Date() } }
     })
 
     if (!checklist) {
@@ -116,5 +123,18 @@ export class ChecklistService {
     }
 
     return checklist
+  }
+
+  // update all checklist expired_at to created_at + 30 days
+  static async updateExpiredAt() {
+    await prisma.checklist.updateMany({
+      where: { deleted: false, expired_at: { gte: new Date() } },
+      data: {
+        created_at: new Date(),
+        expired_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      }
+    })
+
+    return true
   }
 }

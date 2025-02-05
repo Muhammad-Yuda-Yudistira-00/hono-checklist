@@ -177,7 +177,7 @@ export class TaskService {
 
   static async checklistMustExists(code: string): Promise<Checklist> {
     const checklist = await prisma.checklist.findFirst({
-      where: { code, deleted: false }
+      where: { code, deleted: false, expired_at: { gte: new Date() } }
     })
 
     if (!checklist) {

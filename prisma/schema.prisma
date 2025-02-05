@@ -26,6 +26,7 @@ model Checklist {
   title       String   @default("Untitled")
   description String?
   tasks       Task[]
+  expired_at  DateTime
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   deleted     Boolean  @default(false)

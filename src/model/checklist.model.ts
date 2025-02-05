@@ -17,6 +17,7 @@ export type ChecklistResponse = {
   title: string
   description: string | null
   createdAt: Date
+  expiredAt: Date
 }
 
 export type ListChecklistResponse = {
@@ -35,6 +36,7 @@ export function toChecklistResponse(checklist: Checklist): ChecklistResponse {
     code: checklist.code,
     title: checklist.title,
     description: checklist.description,
-    createdAt: checklist.created_at
+    createdAt: checklist.created_at,
+    expiredAt: checklist.expired_at
   }
 }

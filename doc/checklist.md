@@ -16,7 +16,8 @@ Response Body :
     "code": "string",
     "title": "Untitled",
     "description": null,
-    "createdAt": "2023-09-15T08:47:55.000Z"
+    "createdAt": "2023-09-15T08:47:55.000Z",
+    "expiredAt": "2023-09-22T08:47:55.000Z"
   }
 }
 ```
@@ -43,7 +44,8 @@ Response Body :
       "code": "string",
       "title": "string",
       "description": "string",
-      "createdAt": "2023-09-15T08:47:55.000Z"
+      "createdAt": "2023-09-15T08:47:55.000Z",
+      "expiredAt": "2023-09-22T08:47:55.000Z"
     }
   ],
   "pagination": {
@@ -71,7 +73,8 @@ Response Body :
     "code": "string",
     "title": "string",
     "description": "string",
-    "createdAt": "2023-09-15T08:47:55.000Z"
+    "createdAt": "2023-09-15T08:47:55.000Z",
+    "expiredAt": "2023-09-22T08:47:55.000Z"
   }
 }
 ```
@@ -101,7 +104,8 @@ Response Body :
     "code": "string",
     "title": "string",
     "description": "string",
-    "createdAt": "2023-09-15T08:47:55.000Z"
+    "createdAt": "2023-09-15T08:47:55.000Z",
+    "expiredAt": "2023-09-22T08:47:55.000Z"
   }
 }
 ```
