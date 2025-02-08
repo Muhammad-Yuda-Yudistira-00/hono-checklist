@@ -88,7 +88,8 @@ Request Body :
 ```json
 {
   "title": "string",
-  "description": "string"
+  "description": "string",
+  "expired_at": "date"
 }
 ```
 

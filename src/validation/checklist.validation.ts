@@ -11,7 +11,8 @@ export class checklistValidation {
   static readonly UPDATE: ZodType = z.object({
     code: z.string(),
     title: z.string().max(100),
-    description: z.string().max(100)
+    description: z.string().max(100),
+    expired_at: z.string().max(100)
   })
 
   static readonly REMOVE: ZodType = z.string()

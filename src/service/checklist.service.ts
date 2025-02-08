@@ -85,11 +85,16 @@ export class ChecklistService {
       checklist.description = request.description
     }
 
+    if (request.expired_at) {
+      checklist.expired_at = new Date(request.expired_at)
+    }
+
     const updatedChecklist = await prisma.checklist.update({
       where: { code: request.code, deleted: false },
       data: {
         title: checklist.title,
-        description: checklist.description
+        description: checklist.description,
+        expired_at: checklist.expired_at
       }
     })
 
@@ -113,7 +118,7 @@ export class ChecklistService {
 
   static async checklistMustExists(code: string): Promise<Checklist> {
     const checklist = await prisma.checklist.findFirst({
-      where: { code, deleted: false, expired_at: { gte: new Date() } }
+      where: { code, deleted: false }
     })
 
     if (!checklist) {
