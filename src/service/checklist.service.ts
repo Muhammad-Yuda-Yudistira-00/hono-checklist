@@ -85,8 +85,8 @@ export class ChecklistService {
       checklist.description = request.description
     }
 
-    if (request.expired_at) {
-      checklist.expired_at = new Date(request.expired_at)
+    if (request.expiredAt) {
+      checklist.expired_at = new Date(request.expiredAt)
     }
 
     const updatedChecklist = await prisma.checklist.update({

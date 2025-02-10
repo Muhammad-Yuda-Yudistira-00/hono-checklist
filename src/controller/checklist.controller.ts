@@ -39,7 +39,7 @@ checklistController.patch('/checklist/:code', async (c) => {
     code: code,
     title: formData.get('title')?.toString() || '',
     description: formData.get('description')?.toString() || '',
-    expired_at: formData.get('expired_at')?.toString() || ''
+    expiredAt: formData.get('expiredAt')?.toString() || ''
   }
 
   const checklistResponse = await ChecklistService.update(request)

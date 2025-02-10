@@ -9,7 +9,7 @@ export type UpdateChecklistRequest = {
   code: string
   title: string | null
   description: string | null
-  expired_at: string | null
+  expiredAt: string | null
 }
 
 export type ChecklistResponse = {
