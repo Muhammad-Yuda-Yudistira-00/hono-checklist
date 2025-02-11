@@ -67,7 +67,15 @@ export class ChecklistService {
   static async get(code: string): Promise<ChecklistResponse> {
     code = checklistValidation.GET.parse(code)
 
-    const checklist = await this.checklistMustExists(code)
+    const checklist = await prisma.checklist.findFirst({
+      where: { code, deleted: false, expired_at: { gte: new Date() } }
+    })
+
+    if (!checklist) {
+      throw new HTTPException(404, {
+        message: 'Checklist not found'
+      })
+    }
 
     return toChecklistResponse(checklist)
   }
