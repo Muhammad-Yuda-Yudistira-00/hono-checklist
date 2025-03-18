@@ -17,7 +17,8 @@ taskController.post('/checklist/:code/task', async (c) => {
 
   const request: CreateTaskRequest = {
     code: String(c.req.param('code')),
-    title: formData.get('title')?.toString() || ''
+    title: formData.get('title')?.toString() || '',
+    parentId: Number(formData.get('parentId'))
   }
 
   const taskResponse = await TaskService.create(request)

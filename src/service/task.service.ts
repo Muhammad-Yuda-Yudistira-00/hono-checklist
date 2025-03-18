@@ -19,11 +19,24 @@ export class TaskService {
 
     await this.checklistMustExists(request.code)
 
-    // order
+    let parent = null
+    if (request.parentId) {
+      parent = await this.taskMustExists(request.code, request.parentId)
+
+      // max parent level 3
+      if (parent.level >= 3) {
+        throw new HTTPException(400, {
+          message: 'Parent task level must be less than 3'
+        })
+      }
+    }
+
+    // order, where checklist code and parent id
 
     const order = await prisma.task.count({
       where: {
-        checklist: { code: request.code }
+        checklist: { code: request.code },
+        parent_id: parent ? parent.id : null
       }
     })
 
@@ -32,7 +45,9 @@ export class TaskService {
         title: request.title,
         order: order + 1,
         status: 'in_progress',
-        checklist: { connect: { code: request.code } }
+        checklist: { connect: { code: request.code } },
+        parent: parent ? { connect: { id: parent.id } } : undefined,
+        level: parent ? parent.level + 1 : 1
       }
     })
 

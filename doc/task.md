@@ -8,7 +8,8 @@ Request Body :
 
 ```json
 {
-  "title": "string"
+  "title": "string",
+  "parentId": "number"
 }
 ```
 
