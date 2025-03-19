@@ -36,6 +36,7 @@ export type TaskResponse = {
   title: string
   status: string
   parentId: number | null
+  level: number
   children: TaskResponse[]
 }
 
@@ -56,6 +57,7 @@ export function toTaskResponse(task: Task): TaskResponse {
     title: task.title,
     status: task.status,
     parentId: task.parent_id,
+    level: task.level,
     children: []
   }
 }

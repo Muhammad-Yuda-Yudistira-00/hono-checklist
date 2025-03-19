@@ -26,6 +26,7 @@ Response Body :
     "title": "string",
     "status": "string",
     "parentId": "number",
+    "level": "number",
     "children": []
   }
 }
@@ -54,6 +55,7 @@ Response Body :
       "title": "string",
       "status": "string",
       "parentId": "number",
+      "level": "number",
       "children": []
     }
   ],
@@ -83,6 +85,7 @@ Response Body :
     "title": "string",
     "status": "string",
     "parentId": "number",
+    "level": "number",
     "children": []
   }
 }
@@ -117,6 +120,7 @@ Response Body :
     "title": "string",
     "status": "string",
     "parentId": "number",
+    "level": "number",
     "children": []
   }
 }

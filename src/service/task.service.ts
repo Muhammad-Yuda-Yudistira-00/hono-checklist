@@ -86,6 +86,7 @@ export class TaskService {
         title: task.title,
         status: task.status,
         parentId: task.parent_id,
+        level: task.level,
         children: await this.getTaskWithChildren(task.id) // Ambil children rekursif
       }))
     )
@@ -253,6 +254,7 @@ export class TaskService {
           title: child.title,
           status: child.status,
           parentId: child.parent_id,
+          level: child.level,
           children: await this.getTaskWithChildren(child.id)
         })
       )
