@@ -24,7 +24,9 @@ Response Body :
     "id": "number",
     "order": "number",
     "title": "string",
-    "status": "string"
+    "status": "string",
+    "parentId": "number",
+    "children": []
   }
 }
 ```
@@ -50,7 +52,9 @@ Response Body :
       "id": "number",
       "order": "number",
       "title": "string",
-      "status": "string"
+      "status": "string",
+      "parentId": "number",
+      "children": []
     }
   ],
   "pagination": {
@@ -77,7 +81,9 @@ Response Body :
     "id": "number",
     "order": "number",
     "title": "string",
-    "status": "string"
+    "status": "string",
+    "parentId": "number",
+    "children": []
   }
 }
 ```
@@ -109,7 +115,9 @@ Response Body :
     "id": "number",
     "order": "number",
     "title": "string",
-    "status": "string"
+    "status": "string",
+    "parentId": "number",
+    "children": []
   }
 }
 ```
