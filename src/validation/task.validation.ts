@@ -1,10 +1,10 @@
-import { optional, z, ZodType } from 'zod'
+import { z, ZodType } from 'zod'
 
 export class TaskValidation {
   static readonly CREATE: ZodType = z.object({
     code: z.string().min(1).max(8),
     title: z.string().min(1).max(100),
-    parentId: z.number().nullable()
+    level: z.number().min(1).max(3)
   })
 
   static readonly LIST: ZodType = z.object({
@@ -22,6 +22,7 @@ export class TaskValidation {
     code: z.string().min(1).max(8),
     id: z.number().positive(),
     order: z.number().positive().nullable(),
+    level: z.number().min(1).max(3),
     title: z.string().max(100),
     status: z.string().max(100)
   })

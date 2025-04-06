@@ -19,24 +19,17 @@ export class TaskService {
 
     await this.checklistMustExists(request.code)
 
-    let parent = null
-    if (request.parentId) {
-      parent = await this.taskMustExists(request.code, request.parentId)
-
-      // max parent level 3
-      if (parent.level >= 3) {
-        throw new HTTPException(400, {
-          message: 'Parent task level must be less than 3'
-        })
-      }
+    // max level 3
+    if (request.level > 3) {
+      throw new HTTPException(400, {
+        message: 'Task level must be less than 3'
+      })
     }
 
-    // order, where checklist code and parent id
-
+    // order
     const order = await prisma.task.count({
       where: {
-        checklist: { code: request.code },
-        parent_id: parent ? parent.id : null
+        checklist: { code: request.code }
       }
     })
 
@@ -46,8 +39,7 @@ export class TaskService {
         order: order + 1,
         status: 'in_progress',
         checklist: { connect: { code: request.code } },
-        parent: parent ? { connect: { id: parent.id } } : undefined,
-        level: parent ? parent.level + 1 : 1
+        level: request.level
       }
     })
 
@@ -63,11 +55,9 @@ export class TaskService {
 
     await this.checklistMustExists(request.code)
 
-    // Ambil tasks yang parent_id NULL (task utama)
     const tasks = await prisma.task.findMany({
       where: {
-        checklist: { code: request.code },
-        parent_id: null
+        checklist: { code: request.code }
       },
       orderBy: { order: 'asc' },
       take: request.per_page,
@@ -78,21 +68,8 @@ export class TaskService {
       where: { checklist: { code: request.code } }
     })
 
-    // Rekursif untuk mengambil children
-    const tasksWithChildren = await Promise.all(
-      tasks.map(async (task) => ({
-        id: task.id,
-        order: task.order,
-        title: task.title,
-        status: task.status,
-        parentId: task.parent_id,
-        level: task.level,
-        children: await this.getTaskWithChildren(task.id) // Ambil children rekursif
-      }))
-    )
-
     return {
-      data: tasksWithChildren,
+      data: tasks.map(toTaskResponse),
       pagination: {
         currentPage: request.page,
         perPage: request.per_page,
@@ -125,8 +102,7 @@ export class TaskService {
       if (oldTask.order < request.order) {
         await prisma.task.updateMany({
           where: {
-            order: { gt: oldTask.order, lte: request.order },
-            parent_id: oldTask.parent_id
+            order: { gt: oldTask.order, lte: request.order }
           },
           data: {
             order: { decrement: 1 }
@@ -135,8 +111,7 @@ export class TaskService {
       } else if (oldTask.order > request.order) {
         await prisma.task.updateMany({
           where: {
-            order: { gte: request.order, lt: oldTask.order },
-            parent_id: oldTask.parent_id
+            order: { gte: request.order, lt: oldTask.order }
           },
           data: {
             order: { increment: 1 }
@@ -148,6 +123,10 @@ export class TaskService {
         where: { id: request.id },
         data: { order: request.order }
       })
+    }
+
+    if (request.level) {
+      task.level = request.level
     }
 
     if (request.title) {
@@ -189,15 +168,14 @@ export class TaskService {
     const tasks = await prisma.task.findMany({
       orderBy: { order: 'asc' },
       where: {
-        checklist: { code: request.code },
-        parent_id: task.parent_id
+        checklist: { code: request.code }
       }
     })
 
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].order > task.order) {
         await prisma.task.update({
-          where: { id: tasks[i].id, parent_id: task.parent_id },
+          where: { id: tasks[i].id },
           data: { order: tasks[i].order - 1 }
         })
       }
@@ -238,26 +216,5 @@ export class TaskService {
     }
 
     return task
-  }
-
-  static async getTaskWithChildren(taskId: number): Promise<TaskResponse[]> {
-    const children = await prisma.task.findMany({
-      where: { parent_id: taskId },
-      orderBy: { order: 'asc' }
-    })
-
-    return Promise.all(
-      children.map(
-        async (child): Promise<TaskResponse> => ({
-          id: child.id,
-          order: child.order,
-          title: child.title,
-          status: child.status,
-          parentId: child.parent_id,
-          level: child.level,
-          children: await this.getTaskWithChildren(child.id)
-        })
-      )
-    )
   }
 }

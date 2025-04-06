@@ -3,7 +3,7 @@ import { Status, Task } from '@prisma/client'
 export type CreateTaskRequest = {
   code: string
   title: string
-  parentId: number | null
+  level: number
 }
 
 export type ListTaskRequest = {
@@ -21,6 +21,7 @@ export type UpdateTaskRequest = {
   code: string
   id: number
   order: number | null
+  level: number
   title: string
   status: Status
 }
@@ -35,9 +36,7 @@ export type TaskResponse = {
   order: number
   title: string
   status: string
-  parentId: number | null
   level: number
-  children: TaskResponse[]
 }
 
 export type ListTaskResponse = {
@@ -56,8 +55,6 @@ export function toTaskResponse(task: Task): TaskResponse {
     order: task.order,
     title: task.title,
     status: task.status,
-    parentId: task.parent_id,
-    level: task.level,
-    children: []
+    level: task.level
   }
 }

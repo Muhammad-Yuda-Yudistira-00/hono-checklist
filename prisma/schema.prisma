@@ -37,7 +37,6 @@ model Checklist {
 model Task {
   id           Int       @id @default(autoincrement())
   checklist_id Int
-  parent_id    Int?
   level        Int       @default(1)
   order        Int
   title        String
@@ -45,8 +44,6 @@ model Task {
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   checklist    Checklist @relation(fields: [checklist_id], references: [id])
-  parent       Task?     @relation("TaskHierarchy", fields: [parent_id], references: [id])
-  children     Task[]    @relation("TaskHierarchy")
 
   @@map("task")
 }
