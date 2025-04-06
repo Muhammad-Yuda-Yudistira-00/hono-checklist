@@ -147,7 +147,8 @@ export class TaskService {
       where: { id: request.id },
       data: {
         title: task.title,
-        status: task.status
+        status: task.status,
+        level: task.level
       }
     })
 

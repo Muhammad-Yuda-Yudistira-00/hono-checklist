@@ -9,7 +9,7 @@ Request Body :
 ```json
 {
   "title": "string",
-  "parentId": "number"
+  "level": "number"
 }
 ```
 
@@ -25,9 +25,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "parentId": "number",
     "level": "number",
-    "children": []
   }
 }
 ```
@@ -54,9 +52,7 @@ Response Body :
       "order": "number",
       "title": "string",
       "status": "string",
-      "parentId": "number",
       "level": "number",
-      "children": []
     }
   ],
   "pagination": {
@@ -84,9 +80,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "parentId": "number",
     "level": "number",
-    "children": []
   }
 }
 ```
@@ -103,7 +97,8 @@ Request Body :
 {
   "order": "number",
   "title": "string",
-  "status": "done"
+  "status": "done",
+  "level": "number"
 }
 ```
 
@@ -119,9 +114,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "parentId": "number",
     "level": "number",
-    "children": []
   }
 }
 ```
