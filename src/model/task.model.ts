@@ -4,6 +4,7 @@ export type CreateTaskRequest = {
   code: string
   title: string
   level: number
+  order: number | null
 }
 
 export type ListTaskRequest = {
@@ -21,7 +22,7 @@ export type UpdateTaskRequest = {
   code: string
   id: number
   order: number | null
-  level: number
+  level: number | null
   title: string
   status: Status
 }

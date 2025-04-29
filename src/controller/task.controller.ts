@@ -18,7 +18,8 @@ taskController.post('/checklist/:code/task', async (c) => {
   const request: CreateTaskRequest = {
     code: String(c.req.param('code')),
     title: formData.get('title')?.toString() || '',
-    level: Number(formData.get('level'))
+    level: Number(formData.get('level')),
+    order: Number(formData.get('order')) || null
   }
 
   const taskResponse = await TaskService.create(request)
@@ -56,7 +57,7 @@ taskController.patch('/checklist/:code/task/:id', async (c) => {
     code: String(c.req.param('code')),
     id: Number(c.req.param('id')),
     order: Number(formData.get('order')) || null,
-    level: Number(formData.get('level')),
+    level: Number(formData.get('level')) || null,
     title: formData.get('title')?.toString() || '',
     status: (formData.get('status')?.toString() as Status) || ''
   }

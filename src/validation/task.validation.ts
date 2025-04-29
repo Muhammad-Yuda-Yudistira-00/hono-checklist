@@ -3,8 +3,9 @@ import { z, ZodType } from 'zod'
 export class TaskValidation {
   static readonly CREATE: ZodType = z.object({
     code: z.string().min(1).max(8),
-    title: z.string().min(1).max(100),
-    level: z.number().min(1).max(3)
+    title: z.string().min(1).max(300),
+    level: z.number().min(1).max(3),
+    order: z.number().positive().nullable()
   })
 
   static readonly LIST: ZodType = z.object({
@@ -22,8 +23,8 @@ export class TaskValidation {
     code: z.string().min(1).max(8),
     id: z.number().positive(),
     order: z.number().positive().nullable(),
-    level: z.number().min(1).max(3),
-    title: z.string().max(100),
+    level: z.number().min(1).max(3).nullable(),
+    title: z.string().max(300),
     status: z.string().max(100)
   })
 

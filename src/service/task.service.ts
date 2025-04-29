@@ -27,6 +27,17 @@ export class TaskService {
     }
 
     // order
+    if (request.order) {
+      await prisma.task.updateMany({
+        where: {
+          order: { gte: request.order }
+        },
+        data: {
+          order: { increment: 1 }
+        }
+      })
+    }
+
     const order = await prisma.task.count({
       where: {
         checklist: { code: request.code }
@@ -36,7 +47,7 @@ export class TaskService {
     const task = await prisma.task.create({
       data: {
         title: request.title,
-        order: order + 1,
+        order: request.order || order + 1,
         status: 'in_progress',
         checklist: { connect: { code: request.code } },
         level: request.level
