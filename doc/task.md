@@ -25,7 +25,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number",
+    "level": "number"
   }
 }
 ```
@@ -52,7 +52,7 @@ Response Body :
       "order": "number",
       "title": "string",
       "status": "string",
-      "level": "number",
+      "level": "number"
     }
   ],
   "pagination": {
@@ -80,7 +80,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number",
+    "level": "number"
   }
 }
 ```
@@ -114,7 +114,7 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number",
+    "level": "number"
   }
 }
 ```

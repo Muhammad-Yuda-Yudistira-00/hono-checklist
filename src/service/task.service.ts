@@ -30,6 +30,7 @@ export class TaskService {
     if (request.order) {
       await prisma.task.updateMany({
         where: {
+          checklist: { code: request.code },
           order: { gte: request.order }
         },
         data: {
@@ -113,6 +114,7 @@ export class TaskService {
       if (oldTask.order < request.order) {
         await prisma.task.updateMany({
           where: {
+            checklist: { code: request.code },
             order: { gt: oldTask.order, lte: request.order }
           },
           data: {
@@ -122,6 +124,7 @@ export class TaskService {
       } else if (oldTask.order > request.order) {
         await prisma.task.updateMany({
           where: {
+            checklist: { code: request.code },
             order: { gte: request.order, lt: oldTask.order }
           },
           data: {
@@ -177,21 +180,15 @@ export class TaskService {
       where: { id: request.id }
     })
 
-    const tasks = await prisma.task.findMany({
-      orderBy: { order: 'asc' },
+    await prisma.task.updateMany({
       where: {
-        checklist: { code: request.code }
+        checklist: { code: request.code },
+        order: { gte: task.order }
+      },
+      data: {
+        order: { decrement: 1 }
       }
     })
-
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].order > task.order) {
-        await prisma.task.update({
-          where: { id: tasks[i].id },
-          data: { order: tasks[i].order - 1 }
-        })
-      }
-    }
 
     return true
   }
