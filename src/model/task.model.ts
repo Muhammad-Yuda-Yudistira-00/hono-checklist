@@ -1,10 +1,11 @@
-import { Status, Task } from '@prisma/client'
+import { Status, Task, TaskType } from '@prisma/client'
 
 export type CreateTaskRequest = {
   code: string
   title: string
   level: number
   order: number | null
+  type: TaskType | null
 }
 
 export type ListTaskRequest = {
@@ -25,6 +26,7 @@ export type UpdateTaskRequest = {
   level: number | null
   title: string
   status: Status
+  type: TaskType | null
 }
 
 export type RemoveTaskRequest = {
@@ -35,9 +37,10 @@ export type RemoveTaskRequest = {
 export type TaskResponse = {
   id: number
   order: number
-  title: string
-  status: string
   level: number
+  title: string
+  status: Status
+  type: TaskType
 }
 
 export type ListTaskResponse = {
@@ -48,6 +51,10 @@ export type ListTaskResponse = {
     totalPages: number
     totalItems: number
   }
+  meta: {
+    totalInProgress: number
+    totalDone: number
+  }
 }
 
 export function toTaskResponse(task: Task): TaskResponse {
@@ -56,6 +63,7 @@ export function toTaskResponse(task: Task): TaskResponse {
     order: task.order,
     title: task.title,
     status: task.status,
-    level: task.level
+    level: task.level,
+    type: task.type
   }
 }

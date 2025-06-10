@@ -8,7 +8,7 @@ import {
   RemoveTaskRequest,
   UpdateTaskRequest
 } from '../model/task.model'
-import { Status } from '@prisma/client'
+import { Status, TaskType } from '@prisma/client'
 
 export const taskController = new Hono()
 
@@ -19,7 +19,8 @@ taskController.post('/checklist/:code/task', async (c) => {
     code: String(c.req.param('code')),
     title: formData.get('title')?.toString() || '',
     level: Number(formData.get('level')),
-    order: Number(formData.get('order')) || null
+    order: Number(formData.get('order')) || null,
+    type: (formData.get('type')?.toString() as TaskType) || ''
   }
 
   const taskResponse = await TaskService.create(request)
@@ -59,7 +60,8 @@ taskController.patch('/checklist/:code/task/:id', async (c) => {
     order: Number(formData.get('order')) || null,
     level: Number(formData.get('level')) || null,
     title: formData.get('title')?.toString() || '',
-    status: (formData.get('status')?.toString() as Status) || ''
+    status: (formData.get('status')?.toString() as Status) || '',
+    type: (formData.get('type')?.toString() as TaskType) || ''
   }
 
   const taskResponse = await TaskService.update(request)

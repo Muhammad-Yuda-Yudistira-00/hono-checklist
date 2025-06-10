@@ -5,7 +5,12 @@ export class TaskValidation {
     code: z.string().min(1).max(8),
     title: z.string().min(1).max(300),
     level: z.number().min(1).max(3),
-    order: z.number().positive().nullable()
+    order: z.number().positive().nullable(),
+    type: z
+      .string()
+      .transform((val) => (val === '' ? undefined : val))
+      .optional()
+      .pipe(z.enum(['regular', 'daily']).optional())
   })
 
   static readonly LIST: ZodType = z.object({
@@ -25,7 +30,12 @@ export class TaskValidation {
     order: z.number().positive().nullable(),
     level: z.number().min(1).max(3).nullable(),
     title: z.string().max(300),
-    status: z.string().max(100)
+    status: z.string().max(100),
+    type: z
+      .string()
+      .transform((val) => (val === '' ? undefined : val))
+      .optional()
+      .pipe(z.enum(['regular', 'daily']).optional())
   })
 
   static readonly REMOVE: ZodType = z.object({

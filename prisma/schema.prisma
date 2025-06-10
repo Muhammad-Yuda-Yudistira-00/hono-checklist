@@ -41,6 +41,7 @@ model Task {
   order        Int
   title        String
   status       Status    @default(in_progress)
+  type         TaskType  @default(regular) @map("type")
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   checklist    Checklist @relation(fields: [checklist_id], references: [id])
@@ -51,4 +52,9 @@ model Task {
 enum Status {
   in_progress
   done
+}
+
+enum TaskType {
+  regular
+  daily
 }

@@ -9,7 +9,8 @@ Request Body :
 ```json
 {
   "title": "string",
-  "level": "number"
+  "level": "number",
+  "type": "string"
 }
 ```
 
@@ -25,7 +26,8 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number"
+    "level": "number",
+    "type": "string"
   }
 }
 ```
@@ -52,7 +54,8 @@ Response Body :
       "order": "number",
       "title": "string",
       "status": "string",
-      "level": "number"
+      "level": "number",
+      "type": "string"
     }
   ],
   "pagination": {
@@ -60,6 +63,10 @@ Response Body :
     "perPage": 10,
     "totalPages": 1,
     "totalItems": 1
+  },
+  "meta": {
+    "totalInProgress": 1,
+    "totalDone": 1
   }
 }
 ```
@@ -80,7 +87,8 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number"
+    "level": "number",
+    "type": "string"
   }
 }
 ```
@@ -92,13 +100,16 @@ Endpoint : PATCH /api/checklist/{code}/task/{taskId}
 Request Body :
 
 - status : in_progress atau done
+- level : 1,2,3
+- type : regular atau daily
 
 ```json
 {
   "order": "number",
   "title": "string",
   "status": "done",
-  "level": "number"
+  "level": "number",
+  "type": "string"
 }
 ```
 
@@ -114,7 +125,8 @@ Response Body :
     "order": "number",
     "title": "string",
     "status": "string",
-    "level": "number"
+    "level": "number",
+    "type": "string"
   }
 }
 ```

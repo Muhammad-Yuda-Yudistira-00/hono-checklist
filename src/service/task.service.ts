@@ -12,6 +12,7 @@ import {
 import { prisma } from '../utils/prisma'
 import { TaskValidation } from '../validation/task.validation'
 import { HTTPException } from 'hono/http-exception'
+import cron from 'node-cron'
 
 export class TaskService {
   static async create(request: CreateTaskRequest): Promise<TaskResponse> {
@@ -51,7 +52,8 @@ export class TaskService {
         order: request.order || order + 1,
         status: 'in_progress',
         checklist: { connect: { code: request.code } },
-        level: request.level
+        level: request.level,
+        type: request.type || 'regular'
       }
     })
 
@@ -87,6 +89,20 @@ export class TaskService {
         perPage: request.per_page,
         totalPages: Math.ceil(total / request.per_page),
         totalItems: total
+      },
+      meta: {
+        totalInProgress: await prisma.task.count({
+          where: {
+            status: 'in_progress',
+            checklist: { code: request.code }
+          }
+        }),
+        totalDone: await prisma.task.count({
+          where: {
+            status: 'done',
+            checklist: { code: request.code }
+          }
+        })
       }
     }
   }
@@ -102,6 +118,7 @@ export class TaskService {
   }
 
   static async update(request: UpdateTaskRequest): Promise<TaskResponse> {
+
     request = TaskValidation.UPDATE.parse(request)
 
     await this.checklistMustExists(request.code)
@@ -157,12 +174,17 @@ export class TaskService {
       task.status = request.status
     }
 
+    if (request.type) {
+      task.type = request.type
+    }
+
     const updatedTask = await prisma.task.update({
       where: { id: request.id },
       data: {
         title: task.title,
         status: task.status,
-        level: task.level
+        level: task.level,
+        type: task.type
       }
     })
 
@@ -226,4 +248,29 @@ export class TaskService {
 
     return task
   }
+}
+
+export const scheduleDailyTaskReset = () => {
+  cron.schedule(
+    '0 0 * * *',
+    async () => {
+      console.log('⏰ Menjalankan reset task harian...')
+      try {
+        const result = await prisma.task.updateMany({
+          where: {
+            type: 'daily'
+          },
+          data: {
+            status: 'in_progress'
+          }
+        })
+        console.log(`✅ ${result.count} task harian di-reset.`)
+      } catch (error) {
+        console.error('❌ Gagal mereset task harian:', error)
+      }
+    },
+    {
+      timezone: 'Asia/Jakarta' // ⏰ Gunakan WIB jika perlu
+    }
+  )
 }
