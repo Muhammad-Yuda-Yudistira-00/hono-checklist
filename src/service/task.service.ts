@@ -118,7 +118,6 @@ export class TaskService {
   }
 
   static async update(request: UpdateTaskRequest): Promise<TaskResponse> {
-
     request = TaskValidation.UPDATE.parse(request)
 
     await this.checklistMustExists(request.code)
@@ -248,29 +247,4 @@ export class TaskService {
 
     return task
   }
-}
-
-export const scheduleDailyTaskReset = () => {
-  cron.schedule(
-    '0 0 * * *',
-    async () => {
-      console.log('⏰ Menjalankan reset task harian...')
-      try {
-        const result = await prisma.task.updateMany({
-          where: {
-            type: 'daily'
-          },
-          data: {
-            status: 'in_progress'
-          }
-        })
-        console.log(`✅ ${result.count} task harian di-reset.`)
-      } catch (error) {
-        console.error('❌ Gagal mereset task harian:', error)
-      }
-    },
-    {
-      timezone: 'Asia/Jakarta' // ⏰ Gunakan WIB jika perlu
-    }
-  )
 }

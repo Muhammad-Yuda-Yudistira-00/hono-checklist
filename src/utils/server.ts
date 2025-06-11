@@ -6,7 +6,6 @@ import { logger } from './logging'
 import { routes } from '../routes'
 import { apiKeyAuth } from '../middleware/api-key.middleware'
 import { cors } from 'hono/cors'
-import { scheduleDailyTaskReset } from '../service/task.service'
 
 const createServer = () => {
   const app = new Hono()
@@ -22,9 +21,6 @@ const createServer = () => {
     // Middleware API key, kecualikan /auth/generate-api-key
     app.use(apiKeyAuth(['/health', '/api/generate-api-key']) as any)
   }
-
-  // Jalankan cron saat server start
-  scheduleDailyTaskReset()
 
   // Setup routes
   routes(app)
